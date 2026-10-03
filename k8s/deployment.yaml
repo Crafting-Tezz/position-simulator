@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: position-simulator
+spec:
+  selector:
+    matchLabels:
+      app: position-simulator
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: position-simulator
+    spec:
+      containers:
+      - name: position-simulator
+        # the pipeline replaces this tag with the git commit id before applying
+        image: motez00/fleetman-position-simulator:latest
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: production-microservice
