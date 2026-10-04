@@ -29,6 +29,17 @@ pipeline {
             }
         }
 
+        stage('Code Quality') {
+            steps {
+                // 'code-quality' = name of the SonarQube server configured in Jenkins (doc page 81).
+                // The doc's `mvn sonar:sonar` resolves to an old 4.x scanner through a redirect,
+                // so the current SonarScanner for Maven is named explicitly.
+                withSonarQubeEnv('code-quality') {
+                    sh 'mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:5.8.0.7211:sonar -Dsonar.projectKey=position-simulator -Dsonar.projectName=position-simulator'
+                }
+            }
+        }
+
         stage('Image Build') {
             steps {
                 echo "Building ${IMAGE}:${commit_id}"
